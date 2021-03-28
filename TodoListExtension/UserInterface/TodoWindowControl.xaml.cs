@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Shell;
 using System.Collections;
 using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
+using Microsoft;
 
 namespace TodoListExtension
 {
@@ -19,16 +20,10 @@ namespace TodoListExtension
         }
     }
 
-    /// <summary>
-    /// Interaction logic for TodoWindowControl.
-    /// </summary>
     public partial class TodoWindowControl : UserControl
     {
         public TodoWindow parent;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TodoWindowControl"/> class.
-        /// </summary>
         public TodoWindowControl(TodoWindow window)
         {
             this.InitializeComponent();
@@ -74,19 +69,22 @@ namespace TodoListExtension
             taskList.SetActiveProvider(ref guidProvider);
         }
 
-        /// <summary>
-        /// Handles click on the button by displaying a message box.
-        /// </summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event args.</param>
         [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Sample code")]
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
         private void button1_Click(object sender, EventArgs e)
         {
+            //somente teste
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var dte = ServiceProvider.GlobalProvider.GetService(typeof(EnvDTE.DTE)) as EnvDTE80.DTE2;
+            Assumes.Present(dte);
+            MessageBox.Show($"Versão do Visual Studio: {dte.Version}", this.Name);
+
+
             if (txtTodo.Text.Length > 0)
             {
                 var item = new TodoItem(this, txtTodo.Text);
                 lstTodo.Items.Add(item);
+                txtTodo.Clear();
 
                 var outputWindow = parent.GetVsService(typeof(SVsOutputWindow)) as IVsOutputWindow;
                 IVsOutputWindowPane pane;
@@ -96,20 +94,17 @@ namespace TodoListExtension
                 if (pane != null)
                 {
                     pane.OutputString($"To Do item created: {item}\r\n");
-                    //pane.OutputString(string.Format("To Do item created: {0}\r\n", item.ToString()));
                 }
                 else
                 {
                     Guid paneGuid = new Guid();
                     bool visible = true;
                     bool clearWithSolution = false;
-                    // Create a new pane.
                     outputWindow.CreatePane(ref paneGuid,
                                             "MyOutput",
                                             Convert.ToInt32(visible),
                                             Convert.ToInt32(clearWithSolution));
 
-                    // Retrieve the new pane.
                     outputWindow.GetPane(ref paneGuid, out pane);
 
                     pane.OutputString($"To Do item created: {item}\r\n");
@@ -189,5 +184,6 @@ namespace TodoListExtension
                 track.OnSelectChange(mySelContainer);
             }
         }
+
     }
 }

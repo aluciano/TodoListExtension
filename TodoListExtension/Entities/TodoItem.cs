@@ -24,7 +24,7 @@ namespace TodoListExtension
                 object obj;
                 package.GetAutomationObject("TodoListExtension.General", out obj);
 
-                ToolsOptions options = obj as ToolsOptions;
+                TodoWindowToolsOptions options = obj as TodoWindowToolsOptions;
 
                 if (options != null)
                 {

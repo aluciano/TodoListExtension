@@ -2,7 +2,7 @@
 
 namespace TodoListExtension
 {
-    class ToolsOptions : DialogPage
+    class TodoWindowToolsOptions : DialogPage
     {
         public double DaysAhead { get; set; }
     }

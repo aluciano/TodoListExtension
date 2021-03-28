@@ -8,21 +8,30 @@
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
-             Name="MyToolWindow">
-    <Grid>
+             Name="MyToolWindow" Width="Auto" Height="Auto" Margin="5" >
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="70" />
         </Grid.ColumnDefinitions>
-        <Canvas >
-            <TextBox x:Name="txtTodo" Height="23"
-                     TextWrapping="Wrap" 
-                     Text="TextBox" 
-                     Width="208" Canvas.Left="10" Canvas.Top="10" />
-            <Button x:Name="btnAdd" Content="Add"
-                    Width="67" 
-                    Click="button1_Click" Canvas.Left="223" Canvas.Top="10" Height="23" />
-            <ListBox x:Name="lstTodo" 
-                     Height="252"  Width="280" SelectionChanged="lstTodo_SelectionChanged" Canvas.Left="10" Canvas.Top="38"/>
-        </Canvas>
+
+        <TextBox Grid.Row="0" Grid.Column="0" 
+                 x:Name="txtTodo"
+                 TextWrapping="Wrap" SpellCheck.IsEnabled="True" />
+
+        <Button Grid.Row="0" Grid.Column="1"
+                x:Name="btnAdd" Content="Add"
+                Click="button1_Click" 
+                Margin="5,0,0,0" />
+
+        <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                 x:Name="lstTodo" 
+                 SelectionChanged="lstTodo_SelectionChanged" 
+                 Margin="0,5,0,0" />
     </Grid>
 </UserControl>
